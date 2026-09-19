@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width,
+                   initial-scale=1,
+                   maximum-scale=1,
+                   user-scalable=no">
+
+    <title>Montypod</title>
+
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+    <div class="screen">
+
+        <!-- STATUS BAR -->
+        <div class="status-bar">
+
+            <span>9:41</span>
+
+            <span class="wifi-status">
+                Wi-Fi
+
+                <span class="wifi-bars">
+                    <i></i>
+                    <i></i>
+                    <i></i>
+                </span>
+            </span>
+
+        </div>
+
+
+        <!-- NAVIGATION BAR -->
+        <div class="header">
+            <span>Montypod</span>
+        </div>
+
+
+        <!-- SPOTIFY -->
+        <main class="spotify">
+
+            <!-- ALBUM -->
+            <div class="album">
+
+                <div class="album-placeholder">
+                    <span class="music-note">♪</span>
+                </div>
+
+            </div>
+
+
+            <!-- SONG INFO -->
+            <div class="song-info">
+
+                <h1 id="song">
+                    Sin reproducción
+                </h1>
+
+                <p id="artist">
+                    Spotify
+                </p>
+
+            </div>
+
+
+            <!-- PROGRESS BAR -->
+            <div class="progress">
+
+                <div class="progress-bar"></div>
+
+            </div>
+
+
+            <!-- TIME -->
+            <div class="time">
+
+                <span>0:00</span>
+                <span>0:00</span>
+
+            </div>
+
+
+            <!-- CONTROLS -->
+            <div class="controls">
+
+                <button
+                    class="control-button"
+                    onclick="sendCommand('previous')">
+
+                    |&lt;&lt;
+
+                </button>
+
+
+                <button
+                    class="control-button play-button"
+                    onclick="sendCommand('play')">
+
+                    &gt;
+
+                </button>
+
+
+                <button
+                    class="control-button"
+                    onclick="sendCommand('next')">
+
+                    &gt;&gt;|
+
+                </button>
+
+            </div>
+
+
+            <!-- SERVER RESPONSE -->
+            <div id="response">
+                Listo
+            </div>
+
+        </main>
+
+
+        <!-- DOCK -->
+        <div class="dock">
+
+            <div class="dock-icon">
+
+                <span class="dock-music"></span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script src="/app.js"></script>
+
+</body>
+</html>
+
