@@ -18,6 +18,7 @@ body {
     overflow: hidden;
 }
 
+
 .screen {
     width: 100%;
     max-width: 568px;
@@ -33,7 +34,7 @@ body {
 
 /* =========================
    STATUS BAR
-   ========================= */
+========================= */
 
 .status-bar {
     height: 24px;
@@ -52,13 +53,47 @@ body {
     background: #222;
 }
 
+.wifi-status {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.wifi-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 10px;
+}
+
+.wifi-bars i {
+    display: block;
+    width: 3px;
+    background: white;
+    border-radius: 1px;
+}
+
+.wifi-bars i:nth-child(1) {
+    height: 3px;
+}
+
+.wifi-bars i:nth-child(2) {
+    height: 6px;
+}
+
+.wifi-bars i:nth-child(3) {
+    height: 9px;
+}
+
 
 /* =========================
-   NAVIGATION BAR
-   ========================= */
+   HEADER
+========================= */
 
 .header {
     height: 44px;
+
+    position: relative;
 
     display: flex;
     align-items: center;
@@ -69,42 +104,91 @@ body {
     font-size: 18px;
     font-weight: bold;
 
-    background: linear-gradient(
-        #687786,
-        #303943
-    );
+    background:
+        linear-gradient(
+            #687786,
+            #303943
+        );
 
     border-bottom: 1px solid #222;
+
+    text-shadow:
+        0 1px 1px #111;
+}
+
+.header-button {
+    position: absolute;
+
+    left: 8px;
+    top: 7px;
+
+    min-width: 58px;
+    height: 30px;
+
+    padding: 0 10px;
+
+    border: 1px solid #222;
+    border-radius: 6px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            #768694,
+            #3c4751
+        );
+
+    font-size: 13px;
+
+    text-shadow:
+        0 1px 1px #111;
+
+    box-shadow:
+        inset 0 1px rgba(255,255,255,0.35),
+        0 1px 2px rgba(0,0,0,0.5);
 }
 
 
 /* =========================
-   SPOTIFY
-   ========================= */
+   GENERAL CONTENT
+========================= */
 
-.spotify {
-    padding: 20px 25px 100px 25px;
+.screen-content {
+    height: calc(100vh - 24px - 44px - 74px);
 
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding: 16px 25px 100px 25px;
+
+    -webkit-overflow-scrolling: touch;
+}
+
+.hidden {
+    display: none !important;
+}
+
+
+/* =========================
+   NOW PLAYING
+========================= */
+
+#now-playing-screen {
     text-align: center;
 }
 
-
-/* =========================
-   ALBUM
-   ========================= */
-
 .album {
-    width: 190px;
-    height: 190px;
+    width: 170px;
+    height: 170px;
 
-    margin: 0 auto 18px auto;
+    margin: 0 auto 14px auto;
 
     background: #222;
 
     border: 1px solid #111;
 
     box-shadow:
-        0 2px 5px rgba(0, 0, 0, 0.35);
+        0 2px 5px rgba(0,0,0,0.35);
 }
 
 .album-placeholder {
@@ -115,21 +199,47 @@ body {
     align-items: center;
     justify-content: center;
 
-    font-size: 70px;
+    font-size: 65px;
 
     color: #aaa;
 
-    background: linear-gradient(
-        135deg,
-        #444,
-        #111
-    );
+    background:
+        linear-gradient(
+            135deg,
+            #444,
+            #111
+        );
+}
+
+.album-image {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
 }
 
 
 /* =========================
-   SONG INFO
-   ========================= */
+   SONG + LIKE
+========================= */
+
+.song-title-row {
+    display: flex;
+
+    align-items: center;
+
+    width: 100%;
+
+    text-align: left;
+}
+
+.song-info {
+    min-width: 0;
+
+    flex: 1;
+}
 
 .song-info h1 {
     margin: 0;
@@ -137,27 +247,65 @@ body {
     font-size: 20px;
 
     white-space: nowrap;
+
     overflow: hidden;
+
     text-overflow: ellipsis;
 }
 
 .song-info p {
-    margin: 5px 0 0 0;
+    margin: 4px 0 0 0;
 
     font-size: 14px;
 
     color: #777;
 }
 
+.like-button {
+    width: 45px;
+    height: 45px;
+
+    flex-shrink: 0;
+
+    margin-left: 8px;
+
+    padding: 0;
+
+    border: 0;
+
+    background: transparent;
+
+    color: #777;
+
+    font-size: 29px;
+
+    line-height: 45px;
+
+    text-align: center;
+
+    box-shadow: none;
+}
+
+.like-button:active {
+    color: #333;
+}
+
+.like-button.liked {
+    color: #444;
+
+    text-shadow:
+        0 1px white;
+}
+
 
 /* =========================
    PROGRESS
-   ========================= */
+========================= */
 
 .progress {
     height: 8px;
 
-    margin-top: 20px;
+    margin-top: 14px;
 
     background: #c1c1c1;
 
@@ -166,11 +314,12 @@ body {
     border-radius: 5px;
 
     overflow: hidden;
+
+    position: relative;
 }
 
 .progress-bar {
     width: 0%;
-
     height: 100%;
 
     background: #555;
@@ -191,11 +340,48 @@ body {
 
 
 /* =========================
+   VOLUME
+========================= */
+
+.volume-control {
+    display: block;
+
+    width: 100%;
+
+    margin-top: 10px;
+    margin-bottom: 6px;
+
+    text-align: center;
+}
+
+.volume-label {
+    display: block;
+
+    margin-bottom: 2px;
+
+    font-size: 12px;
+
+    color: #777;
+}
+
+#volume-slider {
+    display: block;
+
+    width: 85%;
+    height: 28px;
+
+    margin: 0 auto;
+
+    padding: 0;
+}
+
+
+/* =========================
    CONTROLS
-   ========================= */
+========================= */
 
 .controls {
-    margin-top: 18px;
+    margin-top: 4px;
 
     display: flex;
 
@@ -205,21 +391,21 @@ body {
     gap: 18px;
 }
 
-button {
+.control-button {
     width: 62px;
     height: 42px;
 
     border: 1px solid #888;
+
     border-radius: 6px;
 
-    background: linear-gradient(
-        #ffffff,
-        #d5d5d5
-    );
+    background:
+        linear-gradient(
+            #ffffff,
+            #d5d5d5
+        );
 
     color: #222;
-
-    font-family: Arial, Helvetica, sans-serif;
 
     font-size: 16px;
     font-weight: bold;
@@ -230,17 +416,17 @@ button {
 
     box-shadow:
         inset 0 1px white,
-        0 1px 2px rgba(0, 0, 0, 0.25);
+        0 1px 2px rgba(0,0,0,0.25);
 }
 
-button:active {
+.control-button:active {
     background: #bdbdbd;
 
     box-shadow:
-        inset 0 2px 4px rgba(0, 0, 0, 0.25);
+        inset 0 2px 4px rgba(0,0,0,0.25);
 }
 
-button.play {
+.play-button {
     width: 72px;
     height: 46px;
 
@@ -250,10 +436,10 @@ button.play {
 
 /* =========================
    RESPONSE
-   ========================= */
+========================= */
 
 #response {
-    margin-top: 12px;
+    margin-top: 4px;
 
     font-family: monospace;
 
@@ -264,8 +450,227 @@ button.play {
 
 
 /* =========================
+   PLAYLISTS
+========================= */
+
+.playlist-screen,
+.playlist-detail-screen {
+    padding:
+        0
+        0
+        100px
+        0;
+}
+
+.section-title {
+    height: 38px;
+
+    padding: 10px 14px 8px 14px;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    color: #555;
+
+    text-shadow:
+        0 1px white;
+
+    background:
+        linear-gradient(
+            #eeeeee,
+            #d4d4d4
+        );
+
+    border-bottom: 1px solid #aaa;
+}
+
+
+/* =========================
+   PLAYLIST ROW
+========================= */
+
+.playlist-row {
+    min-height: 65px;
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 7px 10px;
+
+    border-bottom: 1px solid #c7c7c7;
+
+    background:
+        linear-gradient(
+            #ffffff,
+            #eeeeee
+        );
+}
+
+.playlist-row:active {
+    background: #c9c9c9;
+}
+
+.playlist-icon {
+    width: 46px;
+    height: 46px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #777;
+
+    border-radius: 6px;
+
+    color: white;
+
+    font-size: 23px;
+
+    background:
+        linear-gradient(
+            #777,
+            #292929
+        );
+
+    box-shadow:
+        inset 0 1px rgba(255,255,255,0.45),
+        0 1px 2px rgba(0,0,0,0.35);
+
+    text-shadow:
+        0 1px 2px #111;
+}
+
+.like-icon {
+    font-size: 25px;
+}
+
+.playlist-info {
+    min-width: 0;
+
+    flex: 1;
+
+    margin-left: 12px;
+}
+
+.playlist-name {
+    font-size: 16px;
+    font-weight: bold;
+
+    color: #222;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.playlist-count {
+    margin-top: 3px;
+
+    font-size: 12px;
+
+    color: #888;
+}
+
+.playlist-arrow {
+    width: 25px;
+
+    text-align: center;
+
+    font-size: 28px;
+
+    color: #888;
+}
+
+
+/* =========================
+   TRACKS
+========================= */
+
+.track-row {
+    min-height: 58px;
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 7px 10px;
+
+    border-bottom: 1px solid #c7c7c7;
+
+    background:
+        linear-gradient(
+            #ffffff,
+            #eeeeee
+        );
+}
+
+.track-row:active {
+    background: #c9c9c9;
+}
+
+.track-number {
+    width: 28px;
+
+    color: #999;
+
+    font-size: 12px;
+
+    text-align: center;
+}
+
+.track-info {
+    min-width: 0;
+
+    flex: 1;
+
+    margin-left: 7px;
+}
+
+.track-name {
+    font-size: 14px;
+    font-weight: bold;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.track-artist {
+    margin-top: 3px;
+
+    color: #888;
+
+    font-size: 11px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.track-play {
+    width: 30px;
+
+    color: #777;
+
+    font-size: 17px;
+
+    text-align: center;
+}
+
+
+/* =========================
    DOCK
-   ========================= */
+========================= */
 
 .dock {
     position: absolute;
@@ -279,40 +684,68 @@ button.play {
 
     border-radius: 12px;
 
-    background: rgba(210, 210, 210, 0.95);
+    background:
+        rgba(210,210,210,0.96);
 
     border: 1px solid #aaa;
 
     box-shadow:
-        0 2px 8px rgba(0, 0, 0, 0.3);
+        0 2px 8px rgba(0,0,0,0.3);
 
     display: flex;
 
     align-items: center;
     justify-content: center;
+
+    z-index: 20;
 }
 
-.dock-icon {
-    width: 44px;
-    height: 44px;
+.dock-button {
+    width: 42%;
 
-    border-radius: 9px;
+    height: 50px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: 2px 0;
 
-    font-size: 25px;
+    border: 0;
 
-    color: white;
+    background: transparent;
 
-    background: linear-gradient(
-        #666,
-        #222
-    );
+    color: #666;
 
-    box-shadow:
-        inset 0 1px rgba(255, 255, 255, 0.5),
-        0 1px 3px rgba(0, 0, 0, 0.4);
+    text-align: center;
+
+    box-shadow: none;
+}
+
+.dock-button:active {
+    background: rgba(0,0,0,0.08);
+
+    border-radius: 8px;
+}
+
+.dock-button.active {
+    color: #222;
+}
+
+.dock-symbol {
+    display: block;
+
+    height: 27px;
+
+    font-size: 23px;
+
+    line-height: 27px;
+
+    text-shadow:
+        0 1px white;
+}
+
+.dock-label {
+    display: block;
+
+    font-size: 9px;
+
+    font-weight: bold;
 }
 

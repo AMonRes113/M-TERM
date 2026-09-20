@@ -12,51 +12,75 @@
 
     <title>Montypod</title>
 
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet"
+          href="/style.css">
 </head>
 
 <body>
 
-    <div class="screen">
+<div class="screen">
 
-        <!-- STATUS BAR -->
-        <div class="status-bar">
+    <div class="status-bar">
+        <span>9:41</span>
 
-            <span>9:41</span>
-
-            <span class="wifi-status">
-                Wi-Fi
-
-                <span class="wifi-bars">
-                    <i></i>
-                    <i></i>
-                    <i></i>
-                </span>
+        <span class="wifi-status">
+            Wi-Fi
+            <span class="wifi-bars">
+                <i></i>
+                <i></i>
+                <i></i>
             </span>
-
-        </div>
-
-
-        <!-- NAVIGATION BAR -->
-        <div class="header">
-            <span>Montypod</span>
-        </div>
+        </span>
+    </div>
 
 
-        <!-- SPOTIFY -->
-        <main class="spotify">
+    <div class="header">
 
-            <!-- ALBUM -->
-            <div class="album">
+        <button
+            id="back-button"
+            class="header-button hidden"
+            onclick="showPreviousScreen()">
+            ◀
+        </button>
 
-                <div class="album-placeholder">
-                    <span class="music-note">♪</span>
-                </div>
+        <span id="header-title">
+            Montypod
+        </span>
+
+    </div>
+
+
+    <!-- =========================
+         AHORA
+    ========================== -->
+
+    <main
+        id="now-playing-screen"
+        class="screen-content">
+
+        <div class="album">
+
+            <div
+                id="album-placeholder"
+                class="album-placeholder">
+
+                <span class="music-note">♪</span>
 
             </div>
 
+            <img
+                id="album-image"
+                class="album-image hidden"
+                src=""
+                alt="Portada">
 
-            <!-- SONG INFO -->
+        </div>
+
+
+        <!-- NOMBRE + LIKE -->
+
+        <div class="song-title-row">
+
             <div class="song-info">
 
                 <h1 id="song">
@@ -69,78 +93,338 @@
 
             </div>
 
+            <button
+                id="like-button"
+                class="like-button"
+                onclick="toggleLike()">
 
-            <!-- PROGRESS BAR -->
-            <div class="progress">
+                ♡
 
-                <div class="progress-bar"></div>
+            </button>
+
+        </div>
+
+
+        <div
+            id="progress"
+            class="progress">
+
+            <div
+                id="progress-bar"
+                class="progress-bar">
+            </div>
+
+        </div>
+
+
+        <div class="time">
+
+            <span id="current-time">
+                0:00
+            </span>
+
+            <span id="duration">
+                0:00
+            </span>
+
+        </div>
+
+
+        <div class="volume-control">
+
+            <div class="volume-label">
+                Volumen:
+                <span id="volume-value">
+                    --%
+                </span>
+            </div>
+
+            <input
+                id="volume-slider"
+                type="range"
+                min="0"
+                max="100"
+                value="50"
+                step="1"
+                onchange="setVolume(this.value)">
+
+        </div>
+
+
+        <div class="controls">
+
+            <button
+                class="control-button"
+                onclick="sendCommand('previous')">
+                |&lt;&lt;
+            </button>
+
+            <button
+                id="play-button"
+                class="control-button play-button"
+                onclick="togglePlay()">
+                &gt;
+            </button>
+
+            <button
+                class="control-button"
+                onclick="sendCommand('next')">
+                &gt;&gt;|
+            </button>
+
+        </div>
+
+
+        <div id="response">
+            Listo
+        </div>
+
+    </main>
+
+
+    <!-- =========================
+         PLAYLISTS
+    ========================== -->
+
+    <main
+        id="playlists-screen"
+        class="screen-content playlist-screen hidden">
+
+        <div class="section-title">
+            Mis playlists
+        </div>
+
+        <div id="playlist-list">
+
+            <div
+                class="playlist-row"
+                onclick="openPlaylist('gym')">
+
+                <div class="playlist-icon">
+                    ♪
+                </div>
+
+                <div class="playlist-info">
+
+                    <div class="playlist-name">
+                        Gym
+                    </div>
+
+                    <div class="playlist-count">
+                        47 canciones
+                    </div>
+
+                </div>
+
+                <div class="playlist-arrow">
+                    ›
+                </div>
 
             </div>
 
 
-            <!-- TIME -->
-            <div class="time">
+            <div
+                class="playlist-row"
+                onclick="openPlaylist('musica')">
 
-                <span>0:00</span>
-                <span>0:00</span>
+                <div class="playlist-icon">
+                    ♪
+                </div>
 
-            </div>
+                <div class="playlist-info">
 
+                    <div class="playlist-name">
+                        Música
+                    </div>
 
-            <!-- CONTROLS -->
-            <div class="controls">
+                    <div class="playlist-count">
+                        126 canciones
+                    </div>
 
-                <button
-                    class="control-button"
-                    onclick="sendCommand('previous')">
+                </div>
 
-                    |&lt;&lt;
-
-                </button>
-
-
-                <button
-                    id="play-button"
-                    class="control-button play-button"
-                    onclick="togglePlay()">
-                    &gt;
-                </button>
-
-
-                <button
-                    class="control-button"
-                    onclick="sendCommand('next')">
-
-                    &gt;&gt;|
-
-                </button>
+                <div class="playlist-arrow">
+                    ›
+                </div>
 
             </div>
 
 
-            <!-- SERVER RESPONSE -->
-            <div id="response">
-                Listo
+            <div
+                class="playlist-row"
+                onclick="openPlaylist('noches')">
+
+                <div class="playlist-icon">
+                    ♪
+                </div>
+
+                <div class="playlist-info">
+
+                    <div class="playlist-name">
+                        Noches
+                    </div>
+
+                    <div class="playlist-count">
+                        38 canciones
+                    </div>
+
+                </div>
+
+                <div class="playlist-arrow">
+                    ›
+                </div>
+
             </div>
 
-        </main>
+
+            <div
+                class="playlist-row"
+                onclick="openPlaylist('rock')">
+
+                <div class="playlist-icon">
+                    ♪
+                </div>
+
+                <div class="playlist-info">
+
+                    <div class="playlist-name">
+                        Rock
+                    </div>
+
+                    <div class="playlist-count">
+                        83 canciones
+                    </div>
+
+                </div>
+
+                <div class="playlist-arrow">
+                    ›
+                </div>
+
+            </div>
 
 
-        <!-- DOCK -->
-        <div class="dock">
+            <div
+                class="playlist-row"
+                onclick="openPlaylist('chill')">
 
-            <div class="dock-icon">
+                <div class="playlist-icon">
+                    ♪
+                </div>
 
-                <span class="dock-music"></span>
+                <div class="playlist-info">
+
+                    <div class="playlist-name">
+                        Chill
+                    </div>
+
+                    <div class="playlist-count">
+                        52 canciones
+                    </div>
+
+                </div>
+
+                <div class="playlist-arrow">
+                    ›
+                </div>
+
+            </div>
+
+
+            <div
+                class="playlist-row"
+                onclick="openPlaylist('likes')">
+
+                <div class="playlist-icon like-icon">
+                    ♥
+                </div>
+
+                <div class="playlist-info">
+
+                    <div class="playlist-name">
+                        Me gusta
+                    </div>
+
+                    <div class="playlist-count">
+                        Tus canciones favoritas
+                    </div>
+
+                </div>
+
+                <div class="playlist-arrow">
+                    ›
+                </div>
 
             </div>
 
         </div>
 
+    </main>
+
+
+    <!-- =========================
+         PLAYLIST ABIERTA
+    ========================== -->
+
+    <main
+        id="playlist-detail-screen"
+        class="screen-content playlist-detail-screen hidden">
+
+        <div
+            id="playlist-detail-title"
+            class="section-title">
+            Playlist
+        </div>
+
+        <div id="playlist-tracks">
+        </div>
+
+    </main>
+
+
+    <!-- =========================
+         DOCK
+    ========================== -->
+
+    <div class="dock">
+
+        <button
+            id="dock-now-playing"
+            class="dock-button active"
+            onclick="showNowPlaying()">
+
+            <span class="dock-symbol">
+                ♪
+            </span>
+
+            <span class="dock-label">
+                Ahora
+            </span>
+
+        </button>
+
+
+        <button
+            id="dock-playlists"
+            class="dock-button"
+            onclick="showPlaylists()">
+
+            <span class="dock-symbol">
+                ≡
+            </span>
+
+            <span class="dock-label">
+                Playlists
+            </span>
+
+        </button>
+
     </div>
 
+</div>
 
-    <script src="/app.js"></script>
+
+<script src="/app.js"></script>
 
 </body>
 </html>

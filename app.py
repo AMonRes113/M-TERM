@@ -28,10 +28,6 @@ SPOTIFY_SCOPES = (
     "user-read-currently-playing"
 )
 
-# =========================
-# ESTADO DE AUTENTICACIÓN
-# =========================
-
 oauth_state = None
 access_token = None
 refresh_token = None
@@ -134,8 +130,13 @@ def callback():
 
     token_data = response.json()
 
-    access_token = token_data.get("access_token")
-    refresh_token = token_data.get("refresh_token")
+    access_token = token_data.get(
+        "access_token"
+    )
+
+    refresh_token = token_data.get(
+        "refresh_token"
+    )
 
     print("Spotify conectado correctamente.")
     print("Access token obtenido.")
@@ -221,7 +222,10 @@ def spotify_request(
         **kwargs
     )
 
-    # Access token expirado
+    # =========================
+    # ACCESS TOKEN EXPIRADO
+    # =========================
+
     if response.status_code == 401:
 
         print(
@@ -270,14 +274,23 @@ def spotify_current():
             "message": "Spotify no está conectado."
         }, 401
 
-    # No hay reproducción activa
+    # =========================
+    # SIN REPRODUCCIÓN ACTIVA
+    # =========================
+
     if response.status_code == 204:
 
         return {
             "connected": True,
             "playing": False,
-            "track": None
+            "track": None,
+            "volume_percent": None,
+            "device": None
         }
+
+    # =========================
+    # ERROR
+    # =========================
 
     if response.status_code != 200:
 
@@ -290,6 +303,33 @@ def spotify_current():
 
     item = data.get("item")
 
+    device = data.get(
+        "device",
+        {}
+    )
+
+    # =========================
+    # INFORMACIÓN DEL DISPOSITIVO
+    # =========================
+
+    device_info = {
+        "id": device.get("id"),
+        "name": device.get("name"),
+        "type": device.get("type"),
+        "is_active": device.get("is_active"),
+        "is_restricted": device.get("is_restricted"),
+        "supports_volume": device.get("supports_volume"),
+        "volume_percent": device.get("volume_percent")
+    }
+
+    volume_percent = device.get(
+        "volume_percent"
+    )
+
+    # =========================
+    # SIN CANCIÓN
+    # =========================
+
     if not item:
 
         return {
@@ -298,7 +338,9 @@ def spotify_current():
                 "is_playing",
                 False
             ),
-            "track": None
+            "track": None,
+            "volume_percent": volume_percent,
+            "device": device_info
         }
 
     # =========================
@@ -343,7 +385,6 @@ def spotify_current():
     # =========================
 
     return {
-
         "connected": True,
 
         "playing": data.get(
@@ -361,8 +402,11 @@ def spotify_current():
             0
         ),
 
-        "track": {
+        "volume_percent": volume_percent,
 
+        "device": device_info,
+
+        "track": {
             "name": item.get(
                 "name",
                 "Sin título"
@@ -381,9 +425,7 @@ def spotify_current():
             ),
 
             "image": album_image
-
         }
-
     }
 
 
@@ -398,8 +440,16 @@ def command(command):
         f"Comando recibido: {command}"
     )
 
+    # =========================
+    # PING
+    # =========================
+
     if command == "ping":
         return "PONG"
+
+    # =========================
+    # COMPROBAR CONEXIÓN
+    # =========================
 
     if not access_token:
 
@@ -419,7 +469,10 @@ def command(command):
             "/me/player/play"
         )
 
-        if response is not None and response.status_code in (200, 204):
+        if (
+            response is not None
+            and response.status_code in (200, 204)
+        ):
 
             return "PLAY ejecutado"
 
@@ -446,7 +499,10 @@ def command(command):
             "/me/player/pause"
         )
 
-        if response is not None and response.status_code in (200, 204):
+        if (
+            response is not None
+            and response.status_code in (200, 204)
+        ):
 
             return "PAUSE ejecutado"
 
@@ -473,7 +529,10 @@ def command(command):
             "/me/player/next"
         )
 
-        if response is not None and response.status_code in (200, 204):
+        if (
+            response is not None
+            and response.status_code in (200, 204)
+        ):
 
             return "NEXT ejecutado"
 
@@ -500,7 +559,10 @@ def command(command):
             "/me/player/previous"
         )
 
-        if response is not None and response.status_code in (200, 204):
+        if (
+            response is not None
+            and response.status_code in (200, 204)
+        ):
 
             return "PREVIOUS ejecutado"
 
@@ -513,6 +575,131 @@ def command(command):
 
         return (
             f"Error PREVIOUS: {response.text}",
+            response.status_code
+        )
+
+    # =========================
+    # SEEK / POSICIÓN
+    # =========================
+
+    if command == "seek":
+
+        position = request.args.get(
+            "position"
+        )
+
+        if position is None:
+
+            return (
+                "Falta la posición.",
+                400
+            )
+
+        try:
+
+            position = int(position)
+
+        except ValueError:
+
+            return (
+                "Posición inválida.",
+                400
+            )
+
+        if position < 0:
+            position = 0
+
+        response = spotify_request(
+            "PUT",
+            "/me/player/seek",
+            params={
+                "position_ms": position
+            }
+        )
+
+        if (
+            response is not None
+            and response.status_code == 204
+        ):
+
+            return (
+                "Posición: "
+                + str(position)
+                + " ms"
+            )
+
+        if response is None:
+
+            return (
+                "Spotify no está conectado.",
+                401
+            )
+
+        return (
+            f"Error SEEK: {response.text}",
+            response.status_code
+        )
+
+    # =========================
+    # VOLUMEN
+    # =========================
+
+    if command == "volume":
+
+        volume = request.args.get(
+            "value"
+        )
+
+        if volume is None:
+
+            return (
+                "Falta el valor del volumen.",
+                400
+            )
+
+        try:
+
+            volume = int(volume)
+
+        except ValueError:
+
+            return (
+                "Volumen inválido.",
+                400
+            )
+
+        if volume < 0:
+            volume = 0
+
+        if volume > 100:
+            volume = 100
+
+        response = spotify_request(
+            "PUT",
+            "/me/player/volume",
+            params={
+                "volume_percent": volume
+            }
+        )
+
+        if (
+            response is not None
+            and response.status_code == 204
+        ):
+
+            return (
+                f"Volumen: {volume}%"
+            )
+
+        if response is None:
+
+            return (
+                "Spotify no está conectado.",
+                401
+            )
+
+        return (
+            f"Error VOLUMEN: {response.text}",
             response.status_code
         )
 
